@@ -798,6 +798,7 @@ function Session:_goto(line, source, col)
     local target = ui().pick_if_many(
       response.targets,
       'goto target> ',
+      'dap_goto_target',
       function(target) return target.label end
     )
     if not target then
@@ -1474,6 +1475,7 @@ function Session:_pause(thread_id, cb)
   ui().pick_if_many(
     vim.tbl_values(self.threads),
     "Which thread?: ",
+    "dap_pick_thread",
     function(t) return t.name end,
     function(thread)
       if not thread or not thread.id then
@@ -1523,6 +1525,7 @@ function Session:restart_frame()
       frame = ui().pick_one(
         frames,
         "Can't restart current frame, pick another frame to restart: ",
+        "dap_restart_frame",
         require('dap.entity').frames.render_item
       )
       if not frame then
@@ -1589,6 +1592,7 @@ function Session:_step(step, params)
     ui().pick_if_many(
       paused_threads,
       "Select thread to step in> ",
+      "dap_pick_thread",
       function(t) return t.name end,
       function(thread)
         if thread then

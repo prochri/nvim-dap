@@ -26,7 +26,7 @@ end
 
 --- Same as M.pick_one except that it skips the selection prompt if `items`
 --  contains exactly one item.
-function M.pick_if_many(items, prompt, label_fn, cb)
+function M.pick_if_many(items, prompt, kind, label_fn, cb)
   if #items == 1 then
     if not cb then
       return items[1]
@@ -34,7 +34,7 @@ function M.pick_if_many(items, prompt, label_fn, cb)
       cb(items[1])
     end
   else
-    return M.pick_one(items, prompt, label_fn, cb)
+    return M.pick_one(items, prompt, kind, label_fn, cb)
   end
 end
 
@@ -52,7 +52,7 @@ function M.pick_one_sync(items, prompt, label_fn)
 end
 
 
-function M.pick_one(items, prompt, label_fn, cb)
+function M.pick_one(items, prompt, kind, label_fn, cb)
   local co
   if not cb then
     co = coroutine.running()
@@ -66,6 +66,7 @@ function M.pick_one(items, prompt, label_fn, cb)
   if vim.ui then
     vim.ui.select(items, {
       prompt = prompt,
+      kind = kind,
       format_item = label_fn,
     }, cb)
   else
@@ -399,6 +400,7 @@ function M.trigger_actions(opts)
   M.pick_if_many(
     actions,
     'Actions> ',
+    'dap_actions',
     function(x) return type(x.label) == 'string' and x.label or x.label(info.item) end,
     function(action)
       if action then

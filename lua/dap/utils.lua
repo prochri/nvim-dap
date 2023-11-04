@@ -142,7 +142,7 @@ function M.pick_process(opts)
   local co = coroutine.running()
   if co then
     return coroutine.create(function()
-      require('dap.ui').pick_one(procs, "Select process: ", label_fn, function(choice)
+      require('dap.ui').pick_one(procs, "Select process: ", "dap_pick_process", label_fn, function(choice)
         coroutine.resume(co, choice and choice.pid or nil)
       end)
     end)

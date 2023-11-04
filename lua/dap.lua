@@ -431,6 +431,7 @@ local function select_config_and_run(opts)
   lazy.ui.pick_if_many(
     configurations,
     "Configuration: ",
+    "dap_configuration",
     function(i) return i.name end,
     function(configuration)
       if configuration then
@@ -605,6 +606,7 @@ function M.step_into(opts)
     lazy.ui.pick_if_many(
       response.targets,
       "Step into which function?",
+      "dap_step_into",
       function(target) return target.label end,
       function(target)
         if not target or not target.id then
@@ -967,6 +969,7 @@ function M.continue(opts)
           lazy.ui.pick_if_many(
             stopped_threads,
             'Thread to resume> ',
+            'dap_pick_thread',
             function(t) return t.name or t.id end,
             function(choice)
               if choice then
@@ -978,7 +981,7 @@ function M.continue(opts)
         end),
       })
     end
-    lazy.ui.pick_one(choices, prompt, function(x) return x.label end, function(choice)
+    lazy.ui.pick_one(choices, prompt, 'dap_session', function(x) return x.label end, function(choice)
       if choice then
         choice.action()
       end
